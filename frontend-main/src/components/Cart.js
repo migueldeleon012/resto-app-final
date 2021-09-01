@@ -1,24 +1,57 @@
 import axios from 'axios';
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import DisplayTotal from './DisplayTotal';
 
 const Cart = () => {
   const currentUser = useSelector((state) => state.currentUser);
 
-  const onMinusQuantityButtonClickHanlder = (e) => {
-    console.log(e.target.dataset.id);
-    // axios.put(`http://localhost:8080/items/${e.target.dataset.id}`)
+  const dispatch = useDispatch();
+
+  const onMinusQuantityButtonClickHanlder = async (e) => {
+    const itemFound = currentUser?.cartItems.find(
+      (cartItem) => cartItem._id === e.target.dataset.id
+    );
+    if (itemFound?.count === 1) {
+      await axios.delete(
+        `http://localhost:8080/users/${currentUser._id}/${e.target.dataset.id}`
+      );
+    } else {
+      await axios.put(
+        `http://localhost:8080/users/increaseCount/${currentUser._id}/${e.target.dataset.id}`,
+        { count: itemFound.count - 1 }
+      );
+    }
+    await axios
+      .get(`http://localhost:8080/users/${currentUser?._id}`)
+      .then((res) => {
+        dispatch({ type: 'SET_USER', payload: res.data });
+      });
   };
 
-  const onPlusQuantityButtonClickHanlder = (e) => {
-    console.log(e.target.dataset.id);
-    // axios.put(`http://localhost:8080/items/${e.target.dataset.id}`)
+  const onPlusQuantityButtonClickHanlder = async (e) => {
+    const itemFound = currentUser?.cartItems.find(
+      (cartItem) => cartItem._id === e.target.dataset.id
+    );
+    await axios.put(
+      `http://localhost:8080/users/increaseCount/${currentUser._id}/${e.target.dataset.id}`,
+      { count: itemFound.count + 1 }
+    );
+    await axios
+      .get(`http://localhost:8080/users/${currentUser?._id}`)
+      .then((res) => {
+        dispatch({ type: 'SET_USER', payload: res.data });
+      });
   };
 
-  const onDeleteCartButtonClickHandler = (e) => {
-    console.log(e.target.dataset.id);
-    //axios.delete(`http://localhost:8080/items/${e.target.dataset.id}`)
+  const onDeleteCartButtonClickHandler = async (e) => {
+    await axios.delete(
+      `http://localhost:8080/users/${currentUser._id}/${e.target.dataset.id}`
+    );
+    await axios
+      .get(`http://localhost:8080/users/${currentUser?._id}`)
+      .then((res) => {
+        dispatch({ type: 'SET_USER', payload: res.data });
+      });
   };
 
   if (currentUser?.cartItems?.length === 0) {
@@ -28,12 +61,13 @@ const Cart = () => {
       </div>
     );
   }
+
   return (
     <div className='container__cart'>
       <h2>My Cart</h2>
       <div className='container__cart__placeholder'>
         {currentUser?.cartItems?.map((item) => (
-          <div className='container__cart__item'>
+          <div className='container__cart__item' key={item._id}>
             <div className='img'>
               <img src={item.image} alt={item.name} />
             </div>
@@ -65,7 +99,10 @@ const Cart = () => {
               </div>
               <div className='subtotal'>
                 <h4>Subtotal</h4>
-                <p>Php {item.price * item.count}.00</p>
+                <p>
+                  Php {item.count * item.price}
+                  .00
+                </p>
               </div>
             </div>
           </div>

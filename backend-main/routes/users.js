@@ -37,7 +37,7 @@ router.put('/increaseCount/:user_id/:item_id', (req, res) => {
 router.delete('/:user_id/:item_id', (req, res) => {
   Users.findByIdAndUpdate(req.params.user_id, {
     $pull: {
-      cartItems: { id: req.params.item_id },
+      cartItems: { _id: req.params.item_id },
     },
   }).then((data) => res.send('Cart Items Updated'));
 });
