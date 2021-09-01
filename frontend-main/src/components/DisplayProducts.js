@@ -3,11 +3,14 @@ import { useState } from 'react';
 import EditProductForm from './EditProductForm';
 
 import { onlyUnique } from '../helper';
+
 import axios from 'axios';
+import { useHistory } from 'react-router-dom';
 
 const DisplayProducts = () => {
   const products = useSelector((state) => state.products);
   const displayModal = useSelector((state) => state.displayModal);
+  const isLoggedIn = useSelector((state) => state.isLoggedIn);
 
   const [id, setId] = useState('');
   const [name, setName] = useState('');
@@ -18,6 +21,7 @@ const DisplayProducts = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
 
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const onCategoryChangeClickHandler = (e) => {
     setSelectedCategory(e.target.value);
@@ -32,13 +36,19 @@ const DisplayProducts = () => {
     setImage(e.currentTarget.dataset.image);
   };
 
+  const handleOrderBtnClick = () => {
+    if (!isLoggedIn) {
+      history.push('/login');
+    }
+  };
+
   return (
     <main>
-      <select defaultValue="" onChange={(e) => onCategoryChangeClickHandler(e)}>
-        <option value="" disabled>
+      <select defaultValue='' onChange={(e) => onCategoryChangeClickHandler(e)}>
+        <option value='' disabled>
           Select Category
         </option>
-        <option value="All">All</option>
+        <option value='All'>All</option>
         {products
           .map((product) => product.category)
           .filter(onlyUnique)
@@ -48,7 +58,7 @@ const DisplayProducts = () => {
             </option>
           ))}
       </select>
-      <div className="container">
+      <div className='container'>
         {products
           .filter((product) =>
             selectedCategory === 'All'
@@ -56,23 +66,17 @@ const DisplayProducts = () => {
               : product.category === selectedCategory
           )
           .map((product) => (
-            <div className="container__card" key={product._id}>
-              <div className="img">
+            <div className='container__card' key={product._id}>
+              <div className='img'>
                 <img src={product.image} alt={product.name} />
               </div>
-              <div className="container__card__desc">
-                <div className="name">
+              <div className='container__card__desc'>
+                <div className='name'>
                   <h4>{product.name}</h4>
                   <p>Php {product.price}</p>
                 </div>
-                <div className="btns">
-                  <button
-                    onClick={() =>
-                      dispatch({ type: 'ADD_TO_CART', payload: product })
-                    }
-                  >
-                    Order
-                  </button>
+                <div className='btns'>
+                  <button onClick={handleOrderBtnClick}>Order</button>
                   {/* user.isAdmin &&*/}
                   <button
                     onClick={onEditButtonClickHanlder}
@@ -85,7 +89,7 @@ const DisplayProducts = () => {
                     Edit
                   </button>
                   <button
-                    className="delete"
+                    className='delete'
                     onClick={async () => {
                       await axios.delete(
                         `http://localhost:8080/items/${product._id}`

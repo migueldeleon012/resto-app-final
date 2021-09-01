@@ -14,8 +14,9 @@ import axios from 'axios';
 import { useEffect } from 'react';
 
 const App = () => {
+  const isLoggedIn = useSelector((state) => state.isLoggedIn);
   const displayModal = useSelector((state) => state.displayModal);
-  const products = useSelector((state) => state.products);
+
   const dispatch = useDispatch();
   const [displayNavbar, setDisplayNavbar] = useState(false);
 
@@ -34,43 +35,56 @@ const App = () => {
     initFrontEnd();
 
     //eslint-disable-next-line
-  }, [products]);
+  }, []);
 
   const notDisplayNavbar = () => {
     setDisplayNavbar(!displayNavbar);
   };
 
   return (
-    <div className="App">
+    <div className='App'>
       <Router>
-        <nav className="nav">
+        <nav className='nav'>
           <h1>Pizza at iba pa</h1>
           <div className={displayNavbar ? 'nav__links active' : 'nav__links'}>
-            <div className="links">
-              <Link className="link" to="/" onClick={notDisplayNavbar}>
+            <div className='links'>
+              <Link className='link' to='/' onClick={notDisplayNavbar}>
                 Products
               </Link>
-              <Link className="link" to="/form" onClick={notDisplayNavbar}>
+              <Link className='link' to='/form' onClick={notDisplayNavbar}>
                 Add Product
               </Link>
-              <Link className="link" to="/cart" onClick={notDisplayNavbar}>
+              <Link className='link' to='/cart' onClick={notDisplayNavbar}>
                 Cart
               </Link>
+              {!isLoggedIn && (
+                <>
+                  <Link className='link' to='/login' onClick={notDisplayNavbar}>
+                    Login
+                  </Link>
+                  <Link
+                    className='link'
+                    to='/register'
+                    onClick={notDisplayNavbar}
+                  >
+                    Register
+                  </Link>
+                </>
+              )}
             </div>
           </div>
-          <div className="nav__burger" onClick={notDisplayNavbar}>
-            <div className="line"></div>
-            <div className="line"></div>
-            <div className="line"></div>
+          <div className='nav__burger' onClick={notDisplayNavbar}>
+            <div className='line'></div>
+            <div className='line'></div>
+            <div className='line'></div>
           </div>
         </nav>
-        <Route exact path="/" component={DisplayProduct} />
-        <Route path="/cart" component={Cart} />
-        <Route path="/register" component={Register}></Route>
+        <Route exact path='/' component={DisplayProduct} />
+        <Route path='/cart' component={Cart} />
+        <Route path='/register' component={Register}></Route>
 
-        {/* user.isAdmin && */}
-        <Route path="/form" component={DisplayAddForm} />
-        <Login />
+        <Route path='/form' component={DisplayAddForm} />
+        <Route path='/login'>{!isLoggedIn && <Login />}</Route>
       </Router>
     </div>
   );

@@ -4,6 +4,8 @@ const inititalState = {
   selectedCategory: 'All',
   total: 0,
   cart: [],
+  currentUser: {},
+  isLoggedIn: false,
 };
 
 const reducer = (state = inititalState, action) => {
@@ -13,6 +15,10 @@ const reducer = (state = inititalState, action) => {
       return { ...state, products: action.payload };
     case 'ADD_PRODUCT':
       return { ...state, products: [...state.products, action.payload] };
+    case 'LOGIN':
+      return { ...state, currentUser: action.payload, isLoggedIn: true };
+    case 'LOGOUT':
+      return { ...state, currentUser: {}, isLoggedIn: false };
 
     case 'DELETE_PRODUCT':
       let filteredProducts = state.products.filter(

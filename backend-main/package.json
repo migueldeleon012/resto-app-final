@@ -1,11 +1,11 @@
 {
-  "name": "backend",
+  "name": "backend-main",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "client": "cd ../project#5 && npm start",
+    "client": "cd ../frontend-main && npm start",
     "start": "concurrently \"nodemon index.js\" \"npm run client\""
   },
   "keywords": [],
