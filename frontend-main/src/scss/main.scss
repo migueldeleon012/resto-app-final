@@ -1,0 +1,599 @@
+//global variables
+$bg-color: #fff;
+$font-color: #000;
+$accent-color: #1b6ad1;
+$red: #a82a2a;
+$green: #3fc23f;
+
+//mixins
+@mixin flexAround {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+@mixin flexEvenly {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+@mixin flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+//styling
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+img {
+  width: 100%;
+}
+
+button {
+  background: none;
+  border: 1px solid $accent-color;
+  transition: 300ms;
+  cursor: pointer;
+  &:hover {
+    background: $accent-color;
+    color: $bg-color;
+  }
+}
+
+.overflow {
+  overflow: hidden;
+}
+
+.delete {
+  border: 1px solid $red !important;
+  border-radius: 15px;
+  transition: 300ms;
+  padding: 2px 10px;
+  background: none;
+  &:hover {
+    background: $red !important;
+    color: $bg-color;
+  }
+}
+
+.red {
+  text-align: center;
+  color: $red;
+}
+
+.green {
+  text-align: center;
+  color: $green;
+}
+
+.nav {
+  @include flexAround;
+  background: $accent-color;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 60px;
+
+  h1 {
+    z-index: 10;
+    color: $bg-color;
+    padding: 20px 0;
+  }
+
+  &__links {
+    width: 50%;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: $accent-color;
+    z-index: 1;
+    transform: translateX(100%);
+    transition: 500ms;
+    @include flexCenter();
+
+    .links {
+      @include flexEvenly;
+      flex-direction: column;
+      height: 80%;
+
+      .link {
+        color: $bg-color;
+        margin: 2px 0;
+        text-decoration: none;
+        font-size: 1.1rem;
+      }
+    }
+  }
+
+  &__links.active {
+    transform: translateX(0);
+  }
+
+  &__burger {
+    @include flexEvenly;
+    flex-direction: column;
+    z-index: 10;
+    height: 30px;
+    position: absolute;
+    top: 50%;
+    right: 5%;
+    transform: translate(-5%, -50%);
+
+    .line {
+      width: 100px;
+      width: 30px;
+      height: 2px;
+      background: $bg-color;
+    }
+  }
+}
+
+.login {
+  width: 100%;
+  height: 100vh;
+  @include flexCenter;
+
+  &__container {
+    @include flexEvenly;
+    flex-direction: column;
+    border: 1px solid darken($bg-color, 10%);
+    min-height: 40vh;
+    width: 95%;
+    margin-inline: auto;
+    padding: 10px;
+    border-radius: 5px;
+
+    &__user {
+      @include flexCenter;
+      flex-direction: column;
+
+      svg {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+        text-align: center;
+      }
+    }
+
+    &__field {
+      display: flex;
+      flex-direction: column;
+      margin: 10px 0;
+      width: 60%;
+
+      input {
+        padding: 2px 4px;
+      }
+    }
+    .login-link {
+      text-decoration: none;
+      margin-bottom: 10px;
+      .semitransparent {
+        transition: 300ms;
+        font-size: 0.8rem;
+        color: rgba(63, 63, 63, 0.7);
+        &:hover {
+          color: $font-color;
+        }
+      }
+    }
+
+    .login-btn {
+      width: 50%;
+      padding: 5px;
+      &:hover {
+        transform: scaleY(1.2);
+        transform-origin: center;
+      }
+    }
+  }
+}
+
+main {
+  padding-top: 60px;
+  select {
+    display: block;
+    margin: 15px auto;
+    padding: 2px;
+  }
+
+  .container {
+    max-width: 100%;
+
+    &__card {
+      border: 1px solid darken($bg-color, 10%);
+      margin: 10px;
+      padding: 10px;
+
+      .img {
+        width: 80%;
+        aspect-ratio: 1/1;
+        margin-inline: auto;
+      }
+
+      &__desc {
+        margin-top: 15px;
+
+        .name {
+          margin-bottom: 15px;
+
+          h4 {
+            font-size: 1.3rem;
+            margin-bottom: 2px;
+          }
+        }
+
+        .btns {
+          @include flexEvenly;
+
+          button {
+            padding: 3px 15px;
+            background: none;
+            border: 1px solid $accent-color;
+            border-radius: 15px;
+            transition: 300ms;
+            &:hover {
+              background: $accent-color;
+              color: $bg-color;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.container__inputs {
+  height: 100vh;
+  width: 100%;
+  @include flexCenter;
+  flex-direction: column;
+
+  h2 {
+    position: absolute;
+    top: 80px;
+    z-index: -10;
+  }
+
+  &__input {
+    width: 80%;
+    margin: 3px 0;
+
+    label {
+      font-size: 1.1rem;
+    }
+    input {
+      width: 100%;
+    }
+  }
+
+  button {
+    margin-top: 25px;
+    padding: 2px 0;
+    width: 50%;
+    border-radius: 15px;
+    border: 1px solid $green;
+    background: none;
+    transition: 300ms;
+    &:hover {
+      background: $green;
+      color: $bg-color;
+    }
+  }
+}
+
+.container__cart {
+  padding-top: 60px;
+  width: 100%;
+
+  h2 {
+    text-align: center;
+    margin: 10px;
+  }
+
+  &__placeholder {
+    width: 100%;
+    margin: 0;
+  }
+
+  &__item {
+    border: 1px solid darken($bg-color, 10%);
+    border-radius: 2px;
+    display: flex;
+    padding: 10px;
+    margin: 10px;
+    width: 100%;
+
+    .specs {
+      width: calc(100% - 120px);
+      @include flexAround;
+    }
+
+    .img {
+      width: 100px;
+      height: 100px;
+      margin-right: 30px;
+    }
+
+    .desc {
+      margin-right: 35px;
+
+      p {
+        font-weight: 300;
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+      }
+    }
+
+    .btns {
+      button {
+        padding: 0 4px;
+        margin: 3px;
+      }
+    }
+  }
+}
+
+.total {
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  &__btn {
+    @include flexCenter;
+    .order {
+      padding: 4px 12px;
+      border: 1px solid $green;
+      border-radius: 25px;
+      font-size: 1.2rem;
+
+      &:hover {
+        background: $green;
+        color: $bg-color;
+      }
+    }
+  }
+}
+
+.form {
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  @include flexCenter();
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.7);
+  &__input {
+    background: $bg-color;
+    width: 80%;
+    padding: 10px;
+    border-radius: 2px;
+
+    &__div {
+      margin: 20px 0;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-size: 1.1rem;
+    }
+
+    input {
+      padding: 1px;
+      width: 100%;
+    }
+
+    button {
+      margin-top: 20px;
+      margin-inline: auto;
+      display: block;
+      padding: 4px 12px;
+      border-radius: 15px;
+      border: 1px solid $green;
+      background: none;
+      transition: 300ms;
+      &:hover {
+        background: $green;
+        color: $bg-color;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 425px) {
+  .App {
+    .login {
+      &__container {
+        width: 80%;
+      }
+
+      .semitransparent {
+        font-size: 1rem;
+      }
+    }
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+
+      &__card {
+        width: calc(50% - 20px);
+      }
+    }
+
+    .container__cart {
+      width: 80%;
+      margin-inline: auto;
+    }
+    .link {
+      font-size: 1.1rem;
+    }
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .App {
+    .nav {
+      &__burger {
+        display: none;
+      }
+
+      &__links {
+        position: static;
+        height: inherit;
+        transform: translate(0);
+
+        .links {
+          height: inherit;
+          flex-direction: row;
+          @include flexEvenly();
+          width: 50%;
+          margin: 0;
+        }
+      }
+    }
+
+    .login {
+      &__container {
+        width: 70%;
+      }
+      input {
+        font-size: 1rem;
+      }
+    }
+
+    .form__input {
+      width: 50%;
+    }
+
+    .container {
+      width: 80%;
+      margin-inline: auto;
+
+      &__card {
+        width: calc(100% / 3 - 20px);
+      }
+
+      .btns {
+        width: 100%;
+        @include flexEvenly;
+        button {
+          padding: 3px 8px;
+        }
+      }
+    }
+
+    .container__inputs {
+      width: 60%;
+      margin-inline: auto;
+    }
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .App {
+    .login {
+      &__container {
+        width: 60%;
+      }
+    }
+
+    .container {
+      &__card {
+        width: calc(25% - 20px);
+      }
+    }
+    .container__inputs {
+      width: 60%;
+      margin-inline: auto;
+      label {
+        font-size: 1.2rem;
+      }
+
+      input {
+        padding: 5px;
+      }
+
+      font-size: 2rem;
+
+      button {
+        font-size: 1rem;
+        padding: 5px 0;
+        width: 30%;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .App {
+    .login {
+      &__container {
+        width: 50%;
+      }
+    }
+
+    .container {
+      .btns button {
+        padding: 3px 14px;
+      }
+    }
+
+    .form__input {
+      width: 40%;
+
+      label {
+        font-size: 1.4rem;
+      }
+
+      input,
+      select {
+        font-size: 1.2rem;
+      }
+
+      button {
+        font-size: 1.3rem;
+        padding: 5px 20px;
+        border-radius: 20px;
+      }
+    }
+
+    .container__cart__item {
+      .img {
+        width: 150px;
+        height: 150px;
+      }
+      .desc {
+        p {
+          font-size: 1.5rem;
+        }
+
+        button {
+          font-size: 1.2rem;
+          margin-bottom: 15px;
+        }
+      }
+
+      .subtotal {
+        h4 {
+          font-size: 1.4rem;
+          margin-bottom: 20px;
+        }
+        p {
+          font-size: 1.2rem;
+        }
+      }
+    }
+  }
+}
