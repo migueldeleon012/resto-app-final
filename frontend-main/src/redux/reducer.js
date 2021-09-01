@@ -15,6 +15,8 @@ const reducer = (state = inititalState, action) => {
       return { ...state, products: action.payload };
     case 'ADD_PRODUCT':
       return { ...state, products: [...state.products, action.payload] };
+    case 'SET_USER':
+      return { ...state, currentUser: action.payload };
     case 'LOGIN':
       return { ...state, currentUser: action.payload, isLoggedIn: true };
     case 'LOGOUT':

@@ -11,6 +11,7 @@ const DisplayProducts = () => {
   const products = useSelector((state) => state.products);
   const displayModal = useSelector((state) => state.displayModal);
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  const currentUser = useSelector((state) => state.currentUser);
 
   const [id, setId] = useState('');
   const [name, setName] = useState('');
@@ -36,9 +37,31 @@ const DisplayProducts = () => {
     setImage(e.currentTarget.dataset.image);
   };
 
-  const handleOrderBtnClick = () => {
+  const handleOrderBtnClick = async (product) => {
     if (!isLoggedIn) {
       history.push('/login');
+    } else {
+      let itemFound = currentUser.cartItems.find(
+        (item) => item._id === product._id
+      );
+      if (itemFound) {
+        console.log('increase');
+        await axios.put(
+          `http://localhost:8080/users/increaseCount/${currentUser._id}/${itemFound._id}`,
+          { count: itemFound.count + 1 }
+        );
+      } else {
+        console.log('add item');
+        await axios.put(
+          `http://localhost:8080/users/addToCart/${currentUser._id}`,
+          { ...product, count: 1 }
+        );
+      }
+      await axios
+        .get(`http://localhost:8080/users/${currentUser._id}`)
+        .then((res) => {
+          dispatch({ type: 'SET_USER', payload: res.data });
+        });
     }
   };
 
@@ -76,33 +99,41 @@ const DisplayProducts = () => {
                   <p>Php {product.price}</p>
                 </div>
                 <div className='btns'>
-                  <button onClick={handleOrderBtnClick}>Order</button>
-                  {/* user.isAdmin &&*/}
-                  <button
-                    onClick={onEditButtonClickHanlder}
-                    data-id={product._id}
-                    data-name={product.name}
-                    data-price={product.price}
-                    data-category={product.category}
-                    data-image={product.image}
-                  >
-                    Edit
+                  <button onClick={() => handleOrderBtnClick(product)}>
+                    Order
                   </button>
-                  <button
-                    className='delete'
-                    onClick={async () => {
-                      await axios.delete(
-                        `http://localhost:8080/items/${product._id}`
-                      );
-                      await axios
-                        .get('http://localhost:8080/items/')
-                        .then((res) =>
-                          dispatch({ type: 'INIT_PRODUCTS', payload: res.data })
-                        );
-                    }}
-                  >
-                    Delete
-                  </button>
+                  {currentUser.isAdmin && (
+                    <>
+                      <button
+                        onClick={onEditButtonClickHanlder}
+                        data-id={product._id}
+                        data-name={product.name}
+                        data-price={product.price}
+                        data-category={product.category}
+                        data-image={product.image}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className='delete'
+                        onClick={async () => {
+                          await axios.delete(
+                            `http://localhost:8080/items/${product._id}`
+                          );
+                          await axios
+                            .get('http://localhost:8080/items/')
+                            .then((res) =>
+                              dispatch({
+                                type: 'INIT_PRODUCTS',
+                                payload: res.data,
+                              })
+                            );
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
             </div>

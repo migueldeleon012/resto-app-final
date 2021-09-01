@@ -40,6 +40,7 @@ const Register = () => {
           axios.post('http://localhost:8080/users', {
             username: newUser.username,
             password: newUser.password,
+            isAdmin: false,
           });
           setNewUser(initialState);
           history.push('/login');

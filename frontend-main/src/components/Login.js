@@ -3,7 +3,7 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 const Login = () => {
@@ -38,13 +38,14 @@ const Login = () => {
     });
 
     if (userFound && userFound.password === loginCredentials.password) {
-      dispatch({ type: 'LOGIN', userFound });
-      setLoginCredentials(initialState);
+      dispatch({ type: 'LOGIN', payload: userFound });
+
+      history.push('/');
     }
   };
   useEffect(() => {
     return () => {
-      history.push('/');
+      setLoginCredentials(initialState);
     };
     // eslint-disable-next-line
   }, []);

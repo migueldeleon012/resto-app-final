@@ -49,6 +49,7 @@ const App = () => {
           <h1>Pizza at iba pa</h1>
           <div className={displayNavbar ? 'nav__links active' : 'nav__links'}>
             <div className='links'>
+              <p className='link'>{currentUser?.username}</p>
               <Link className='link' to='/' onClick={notDisplayNavbar}>
                 Products
               </Link>
@@ -61,9 +62,21 @@ const App = () => {
               )}
 
               {isLoggedIn && !currentUser?.isAdmin && (
-                <Link className='link' to='/cart' onClick={notDisplayNavbar}>
-                  Cart
-                </Link>
+                <>
+                  <Link className='link' to='/cart' onClick={notDisplayNavbar}>
+                    Cart
+                  </Link>
+                  <Link
+                    className='link'
+                    to='/'
+                    onClick={() => {
+                      notDisplayNavbar();
+                      dispatch({ type: 'LOGOUT' });
+                    }}
+                  >
+                    Logout
+                  </Link>
+                </>
               )}
 
               {!isLoggedIn && (
