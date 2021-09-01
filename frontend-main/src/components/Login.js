@@ -1,9 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 const Login = () => {
   const initialState = {
@@ -14,6 +15,7 @@ const Login = () => {
   const [loginCredentials, setLoginCredentials] = useState(initialState);
 
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const handleChangeInput = (e) => {
     setLoginCredentials({
@@ -25,18 +27,27 @@ const Login = () => {
   const handleSubmitBtnClick = async (e) => {
     e.preventDefault();
 
+    let userFound;
+
     await axios.get('http://localhost:8080/users').then((res) => {
-      const userFound = res.data.find(
+      userFound = res.data.find(
         (user) =>
           user.username.toLowerCase() ===
           loginCredentials.username.toLocaleLowerCase()
       );
-      if (userFound && userFound.password === loginCredentials.password) {
-        dispatch({ type: 'LOGIN', userFound });
-        setLoginCredentials(initialState);
-      }
     });
+
+    if (userFound && userFound.password === loginCredentials.password) {
+      dispatch({ type: 'LOGIN', userFound });
+      setLoginCredentials(initialState);
+    }
   };
+  useEffect(() => {
+    return () => {
+      history.push('/');
+    };
+    // eslint-disable-next-line
+  }, []);
   return (
     <div className='login'>
       <div className='login__container'>

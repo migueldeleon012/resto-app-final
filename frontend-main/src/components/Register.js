@@ -1,6 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+
+import axios from 'axios';
 
 const Register = () => {
   const initialState = {
@@ -11,10 +14,37 @@ const Register = () => {
 
   const [newUser, setNewUser] = useState(initialState);
 
+  const history = useHistory();
+
   const handleInputChange = (e) => {
     setNewUser({
       ...newUser,
       [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmitClick = async (e) => {
+    e.preventDefault();
+
+    await axios.get('http://localhost:8080/users').then((res) => {
+      const userFound = res.data.find(
+        (user) => user.username === newUser.username
+      );
+      if (userFound) {
+        alert('User Taken');
+      } else {
+        if (newUser.password !== newUser.confirmPassword) {
+          alert('Passwords must match');
+        } else {
+          alert('User Registered');
+          axios.post('http://localhost:8080/users', {
+            username: newUser.username,
+            password: newUser.password,
+          });
+          setNewUser(initialState);
+          history.push('/login');
+        }
+      }
     });
   };
 
@@ -52,7 +82,7 @@ const Register = () => {
             onChange={handleInputChange}
           />
         </div>
-        <button className='login-btn' type='submit'>
+        <button className='login-btn' type='submit' onClick={handleSubmitClick}>
           Register
         </button>
       </div>

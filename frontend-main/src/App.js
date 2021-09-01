@@ -15,6 +15,7 @@ import { useEffect } from 'react';
 
 const App = () => {
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
+  const currentUser = useSelector((state) => state.currentUser);
   const displayModal = useSelector((state) => state.displayModal);
 
   const dispatch = useDispatch();
@@ -51,12 +52,20 @@ const App = () => {
               <Link className='link' to='/' onClick={notDisplayNavbar}>
                 Products
               </Link>
-              <Link className='link' to='/form' onClick={notDisplayNavbar}>
-                Add Product
-              </Link>
-              <Link className='link' to='/cart' onClick={notDisplayNavbar}>
-                Cart
-              </Link>
+              {currentUser?.isAdmin && (
+                <>
+                  <Link className='link' to='/form' onClick={notDisplayNavbar}>
+                    Add Product
+                  </Link>
+                </>
+              )}
+
+              {isLoggedIn && !currentUser?.isAdmin && (
+                <Link className='link' to='/cart' onClick={notDisplayNavbar}>
+                  Cart
+                </Link>
+              )}
+
               {!isLoggedIn && (
                 <>
                   <Link className='link' to='/login' onClick={notDisplayNavbar}>
@@ -83,7 +92,9 @@ const App = () => {
         <Route path='/cart' component={Cart} />
         <Route path='/register' component={Register}></Route>
 
-        <Route path='/form' component={DisplayAddForm} />
+        <Route path='/form'>
+          <DisplayAddForm />
+        </Route>
         <Route path='/login'>{!isLoggedIn && <Login />}</Route>
       </Router>
     </div>
