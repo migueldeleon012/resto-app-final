@@ -3,7 +3,7 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 const Login = () => {
@@ -41,6 +41,8 @@ const Login = () => {
       dispatch({ type: 'LOGIN', payload: userFound });
 
       history.push('/');
+    } else {
+      alert('Wrong username or password');
     }
   };
   useEffect(() => {

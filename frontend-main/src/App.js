@@ -66,19 +66,20 @@ const App = () => {
                   <Link className='link' to='/cart' onClick={notDisplayNavbar}>
                     Cart
                   </Link>
-                  <Link
-                    className='link'
-                    to='/'
-                    onClick={() => {
-                      notDisplayNavbar();
-                      dispatch({ type: 'LOGOUT' });
-                    }}
-                  >
-                    Logout
-                  </Link>
                 </>
               )}
-
+              {isLoggedIn && (
+                <Link
+                  className='link'
+                  to='/'
+                  onClick={() => {
+                    notDisplayNavbar();
+                    dispatch({ type: 'LOGOUT' });
+                  }}
+                >
+                  Logout
+                </Link>
+              )}
               {!isLoggedIn && (
                 <>
                   <Link className='link' to='/login' onClick={notDisplayNavbar}>

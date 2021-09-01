@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 function DisplayTotal() {
   const currentUser = useSelector((state) => state.currentUser);
+  const products = useSelector((state) => state.products);
 
   return (
     <div className='total'>
@@ -13,7 +13,12 @@ function DisplayTotal() {
         <h3>Total:</h3>
         <p>
           Php{' '}
-          {currentUser.cartItems
+          {currentUser?.cartItems
+            ?.map((item) => ({
+              ...products.find((product) => product._id === item._id),
+              count: item.count,
+            }))
+            .filter((item) => item.name !== undefined)
             .map((cartItem) => cartItem.price * cartItem.count)
             .reduce((previous, current) => previous + current)}
           .00

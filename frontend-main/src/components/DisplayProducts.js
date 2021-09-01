@@ -45,16 +45,14 @@ const DisplayProducts = () => {
         (item) => item._id === product._id
       );
       if (itemFound) {
-        console.log('increase');
         await axios.put(
           `http://localhost:8080/users/increaseCount/${currentUser._id}/${itemFound._id}`,
           { count: itemFound.count + 1 }
         );
       } else {
-        console.log('add item');
         await axios.put(
           `http://localhost:8080/users/addToCart/${currentUser._id}`,
-          { ...product, count: 1 }
+          { _id: product._id, count: 1 }
         );
       }
       await axios
