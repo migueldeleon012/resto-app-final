@@ -73,6 +73,10 @@ button {
   color: $green;
 }
 
+.none {
+  @include flexCenter();
+}
+
 .nav {
   @include flexAround;
   background: $accent-color;
@@ -85,6 +89,8 @@ button {
     z-index: 10;
     color: $bg-color;
     padding: 20px 0;
+    width: 20%;
+    text-align: center;
   }
 
   &__links {
@@ -99,10 +105,24 @@ button {
     transition: 500ms;
     @include flexCenter();
 
+    .user {
+      width: 100%;
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      color: $bg-color;
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+
     .links {
       @include flexEvenly;
       flex-direction: column;
       height: 80%;
+      position: relative;
+      width: 100%;
 
       .link {
         color: $bg-color;
@@ -292,10 +312,15 @@ main {
 .container__cart {
   padding-top: 60px;
   width: 100%;
+  min-height: 100vh;
 
   h2 {
     text-align: center;
     margin: 10px;
+  }
+
+  .no-items {
+    font-size: 1.8rem;
   }
 
   &__placeholder {
@@ -333,9 +358,23 @@ main {
     }
 
     .btns {
+      margin-bottom: 5px;
+
       button {
-        padding: 0 4px;
+        width: 30px;
+        height: 30px;
         margin: 3px;
+      }
+    }
+    .cart-delete {
+      svg {
+        margin-right: 10px;
+      }
+
+      padding: 5px 10px;
+      border: 1px solid $red;
+      &:hover {
+        background-color: $red;
       }
     }
   }
@@ -350,7 +389,6 @@ main {
     .order {
       padding: 4px 12px;
       border: 1px solid $green;
-      border-radius: 25px;
       font-size: 1.2rem;
 
       &:hover {
@@ -453,12 +491,20 @@ main {
         position: static;
         height: inherit;
         transform: translate(0);
+        @include flexAround();
+        width: 100%;
+
+        .user {
+          position: static;
+          width: auto;
+          transform: translate(0);
+        }
 
         .links {
           height: inherit;
           flex-direction: row;
           @include flexEvenly();
-          width: 50%;
+          width: 40%;
           margin: 0;
         }
       }

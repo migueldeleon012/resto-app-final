@@ -72,16 +72,16 @@ const Cart = () => {
 
   if (currentUser?.cartItems?.length === 0) {
     return (
-      <div className='container__cart'>
-        <h3>No items in the cart</h3>
+      <div className="container__cart none">
+        <h3 className="no-items">No items in the cart</h3>
       </div>
     );
   }
 
   return (
-    <div className='container__cart'>
+    <div className="container__cart">
       <h2>My Cart</h2>
-      <div className='container__cart__placeholder'>
+      <div className="container__cart__placeholder">
         {currentUser?.cartItems
           ?.map((item) => ({
             ...products.find((product) => product._id === item._id),
@@ -89,14 +89,14 @@ const Cart = () => {
           }))
           .filter((item) => item.name !== undefined)
           ?.map((item) => (
-            <div className='container__cart__item' key={item._id}>
-              <div className='img'>
+            <div className="container__cart__item" key={item._id}>
+              <div className="img">
                 <img src={item.image} alt={item.name} />
               </div>
-              <div className='specs'>
-                <div className='desc'>
+              <div className="specs">
+                <div className="desc">
                   <p>{item.name}</p>
-                  <div className='btns'>
+                  <div className="btns">
                     <button
                       onClick={(e) => onPlusQuantityButtonClickHanlder(e)}
                       data-id={item._id}
@@ -112,14 +112,14 @@ const Cart = () => {
                     <span>{item.count}</span>
                   </div>
                   <button
-                    className='delete'
+                    className="cart-delete"
                     onClick={(e) => onDeleteCartButtonClickHandler(e)}
                     data-id={item._id}
                   >
                     Delete
                   </button>
                 </div>
-                <div className='subtotal'>
+                <div className="subtotal">
                   <h4>Subtotal</h4>
                   <p>
                     Php {item.count * item.price}
