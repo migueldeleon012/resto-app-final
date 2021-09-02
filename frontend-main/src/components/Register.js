@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import axios from 'axios';
 
@@ -15,6 +16,7 @@ const Register = () => {
   const [newUser, setNewUser] = useState(initialState);
 
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const handleInputChange = (e) => {
     setNewUser({
@@ -31,12 +33,70 @@ const Register = () => {
         (user) => user.username === newUser.username
       );
       if (userFound) {
-        alert('User Taken');
+        dispatch({
+          type: 'SET_MESSAGE',
+          payload: {
+            msg: 'Username Already Taken',
+            background: 'red',
+            show: 'show',
+          },
+        });
+        setTimeout(
+          () =>
+            dispatch({
+              type: 'SET_MESSAGE',
+              payload: {
+                msg: 'Username Already Taken',
+                background: 'red',
+                show: '',
+              },
+            }),
+          2000
+        );
       } else {
         if (newUser.password !== newUser.confirmPassword) {
-          alert('Passwords must match');
+          dispatch({
+            type: 'SET_MESSAGE',
+            payload: {
+              msg: 'Passwords must match',
+              background: 'red',
+              show: 'show',
+            },
+          });
+          setTimeout(
+            () =>
+              dispatch({
+                type: 'SET_MESSAGE',
+                payload: {
+                  msg: 'Passwords must match',
+                  background: 'red',
+                  show: '',
+                },
+              }),
+            2000
+          );
         } else {
-          alert('User Registered');
+          dispatch({
+            type: 'SET_MESSAGE',
+            payload: {
+              msg: 'Registration Successful',
+              background: 'green',
+              show: 'show',
+            },
+          });
+          setTimeout(
+            () =>
+              dispatch({
+                type: 'SET_MESSAGE',
+                payload: {
+                  msg: 'Registration Successful',
+                  background: 'green',
+                  show: '',
+                },
+              }),
+            2000
+          );
+
           axios.post('http://localhost:8080/users', {
             username: newUser.username,
             password: newUser.password,

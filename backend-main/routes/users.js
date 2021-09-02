@@ -1,5 +1,7 @@
 import express from 'express';
 import Users from '../models/users.model.js';
+import bcrypt from 'bcryptjs';
+
 const router = express.Router();
 router.get('/', (req, res) => {
   Users.find().then((data) => res.send(data));
@@ -10,9 +12,17 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  let newUser = new Users(req.body);
-  newUser.save().then((data) => {
-    res.send('New User Added!');
+  bcrypt.genSalt(10, function (err, salt) {
+    bcrypt.hash(req.body.password, salt, function (err, hash) {
+      let newUser = new Users({
+        username: req.body.username,
+        password: hash,
+        isAdmin: req.body.isAdmin,
+      });
+      newUser.save().then((data) => {
+        res.send('New User Added!');
+      });
+    });
   });
 });
 

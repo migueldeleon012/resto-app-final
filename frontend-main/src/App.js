@@ -12,6 +12,7 @@ import Register from './components/Register';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect } from 'react';
+import Alert from './components/Alert';
 
 const App = () => {
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
@@ -43,21 +44,21 @@ const App = () => {
   };
 
   return (
-    <div className="App">
+    <div className='App'>
       <Router>
-        <nav className="nav">
+        <nav className='nav'>
           {!isLoggedIn && <h1>Pizza nalang</h1>}
           <div className={displayNavbar ? 'nav__links active' : 'nav__links'}>
             {isLoggedIn && (
-              <p className="user">Welcome, {currentUser?.username}</p>
+              <p className='user'>Welcome, {currentUser?.username}</p>
             )}
-            <div className="links">
-              <Link className="link" to="/" onClick={notDisplayNavbar}>
+            <div className='links'>
+              <Link className='link' to='/' onClick={notDisplayNavbar}>
                 Products
               </Link>
               {currentUser?.isAdmin && (
                 <>
-                  <Link className="link" to="/form" onClick={notDisplayNavbar}>
+                  <Link className='link' to='/form' onClick={notDisplayNavbar}>
                     Add Product
                   </Link>
                 </>
@@ -65,15 +66,15 @@ const App = () => {
 
               {isLoggedIn && !currentUser?.isAdmin && (
                 <>
-                  <Link className="link" to="/cart" onClick={notDisplayNavbar}>
+                  <Link className='link' to='/cart' onClick={notDisplayNavbar}>
                     Cart
                   </Link>
                 </>
               )}
               {isLoggedIn && (
                 <Link
-                  className="link"
-                  to="/"
+                  className='link'
+                  to='/'
                   onClick={() => {
                     notDisplayNavbar();
                     dispatch({ type: 'LOGOUT' });
@@ -84,12 +85,12 @@ const App = () => {
               )}
               {!isLoggedIn && (
                 <>
-                  <Link className="link" to="/login" onClick={notDisplayNavbar}>
+                  <Link className='link' to='/login' onClick={notDisplayNavbar}>
                     Login
                   </Link>
                   <Link
-                    className="link"
-                    to="/register"
+                    className='link'
+                    to='/register'
                     onClick={notDisplayNavbar}
                   >
                     Register
@@ -98,20 +99,21 @@ const App = () => {
               )}
             </div>
           </div>
-          <div className="nav__burger" onClick={notDisplayNavbar}>
-            <div className="line"></div>
-            <div className="line"></div>
-            <div className="line"></div>
+          <div className='nav__burger' onClick={notDisplayNavbar}>
+            <div className='line'></div>
+            <div className='line'></div>
+            <div className='line'></div>
           </div>
         </nav>
-        <Route exact path="/" component={DisplayProduct} />
-        <Route path="/cart" component={Cart} />
-        <Route path="/register" component={Register}></Route>
+        <Alert />
+        <Route exact path='/' component={DisplayProduct} />
+        <Route path='/cart' component={Cart} />
+        <Route path='/register' component={Register}></Route>
 
-        <Route path="/form">
+        <Route path='/form'>
           <DisplayAddForm />
         </Route>
-        <Route path="/login">{!isLoggedIn && <Login />}</Route>
+        <Route path='/login'>{!isLoggedIn && <Login />}</Route>
       </Router>
     </div>
   );

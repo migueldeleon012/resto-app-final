@@ -84,6 +84,7 @@ button {
   top: 0;
   width: 100%;
   height: 60px;
+  z-index: 10;
 
   h1 {
     z-index: 10;
@@ -153,6 +154,32 @@ button {
       height: 2px;
       background: $bg-color;
     }
+  }
+}
+
+.alert {
+  position: fixed;
+  top: 5rem;
+  left: 50%;
+  transform: translate(-50%, -200%);
+  background-color: white;
+  width: 200px;
+  height: 75px;
+  display: grid;
+  place-items: center;
+  border-radius: 5px;
+  font-size: 20px;
+  transition: transform 0.3s linear;
+  &.show {
+    transform: translate(-50%, 0);
+  }
+  &.green {
+    background-color: #3fc23f;
+    color: white;
+  }
+  &.red {
+    background-color: #a82a2a;
+    color: white;
   }
 }
 

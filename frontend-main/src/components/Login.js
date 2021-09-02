@@ -6,6 +6,8 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
+import bcrypt from 'bcryptjs';
+
 const Login = () => {
   const initialState = {
     username: '',
@@ -37,12 +39,55 @@ const Login = () => {
       );
     });
 
-    if (userFound && userFound.password === loginCredentials.password) {
+    if (
+      userFound &&
+      bcrypt.compareSync(loginCredentials.password, userFound.password)
+    ) {
       dispatch({ type: 'LOGIN', payload: userFound });
 
       history.push('/');
+
+      dispatch({
+        type: 'SET_MESSAGE',
+        payload: {
+          msg: 'Login Successful',
+          background: 'green',
+          show: 'show',
+        },
+      });
+      setTimeout(
+        () =>
+          dispatch({
+            type: 'SET_MESSAGE',
+            payload: {
+              msg: 'Login Successful',
+              background: 'green',
+              show: '',
+            },
+          }),
+        2000
+      );
     } else {
-      alert('Wrong username or password');
+      dispatch({
+        type: 'SET_MESSAGE',
+        payload: {
+          msg: 'Wrong username or password',
+          background: 'red',
+          show: 'show',
+        },
+      });
+      setTimeout(
+        () =>
+          dispatch({
+            type: 'SET_MESSAGE',
+            payload: {
+              msg: 'Wrong username or password',
+              background: 'red',
+              show: '',
+            },
+          }),
+        2000
+      );
     }
   };
   useEffect(() => {

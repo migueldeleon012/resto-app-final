@@ -6,6 +6,7 @@ const inititalState = {
   cart: [],
   currentUser: {},
   isLoggedIn: false,
+  message: { msg: 'Alert', background: 'green', show: '' },
 };
 
 const reducer = (state = inititalState, action) => {
@@ -21,6 +22,8 @@ const reducer = (state = inititalState, action) => {
       return { ...state, currentUser: action.payload, isLoggedIn: true };
     case 'LOGOUT':
       return { ...state, currentUser: {}, isLoggedIn: false };
+    case 'SET_MESSAGE':
+      return { ...state, message: action.payload };
 
     case 'DELETE_PRODUCT':
       let filteredProducts = state.products.filter(
@@ -39,56 +42,6 @@ const reducer = (state = inititalState, action) => {
 
     case 'DISPLAY_MODAL':
       return { ...state, displayModal: !state.displayModal };
-
-    //CART RELATED
-    case 'ADD_TO_CART':
-      let duplicate = state.cart.find((item) => item.id === action.payload.id);
-      let copy = state.cart.slice(0);
-      if (duplicate) {
-        duplicate.qty++;
-        return;
-      } else {
-        let found = state.products.find(
-          (product) => product.id === action.payload.id
-        );
-        let toSortCopy = [...copy, found];
-        let sortedCopy = toSortCopy.sort((a, b) => (a.name > b.name ? 1 : -1));
-        return { ...state, cart: sortedCopy };
-      }
-
-    case 'ADD_QUANTITY':
-      let found = state.cart.find((item) => item.name === action.payload.name);
-      found.qty++;
-
-      let copyCart = state.cart.slice(0);
-      let filteredCopy = copyCart.filter((item) => item.name !== found.name);
-      let toSortCopy = [...filteredCopy, found];
-      let sortedCopy = toSortCopy.sort((a, b) => (a.name > b.name ? 1 : -1));
-
-      return { ...state, cart: sortedCopy };
-
-    case 'MINUS_QUANTITY':
-      action.payload.qty--;
-      let filteredArray = state.cart.filter(
-        (item) => item.id !== action.payload.id
-      );
-
-      if (action.payload.qty === 0) {
-        let sortedCopy = filteredArray.sort((a, b) =>
-          a.name > b.name ? 1 : -1
-        );
-        return { ...state, cart: sortedCopy };
-      } else {
-        let toSortCopy = [...filteredArray, action.payload];
-        let sortedCopy = toSortCopy.sort((a, b) => (a.name > b.name ? 1 : -1));
-        return { ...state, cart: sortedCopy };
-      }
-
-    case 'DELETE_CART_ITEM':
-      let filteredCartProducts = state.cart.filter(
-        (product) => product.id !== action.payload
-      );
-      return { ...state, cart: filteredCartProducts };
 
     default:
       return state;
